@@ -2,5 +2,5 @@
 
 ## How to run?
 
-`npx tsc` **to build** \n
+`npx tsc` **to build**
 `node dist/app.js` **to run**
