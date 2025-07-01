@@ -88,6 +88,21 @@ export class TaskService {
     }));
   }
 
+  static getTasksByIdRange(
+    min: number,
+    max: number
+  ): Task[] {
+    const stmt = db.prepare(
+      'SELECT * FROM tasks WHERE id >= ? AND id <= ?'
+    );
+    return stmt.all(min, max).map((row: any) => ({
+      id: row.id,
+      title: row.title,
+      priority: row.priority,
+      completed: !!row.completed,
+    }));
+  }
+
   static completeTask(id: number): void {
     const stmt = db.prepare(
       'UPDATE tasks SET completed = 1 WHERE id = ?'

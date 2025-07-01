@@ -36,6 +36,10 @@ async function main() {
       },
       { value: 'list', label: 'List all tasks' },
       {
+        value: 'listRange',
+        label: 'List tasks by id range',
+      },
+      {
         value: 'complete',
         label: 'Complete a task',
       },
@@ -86,6 +90,45 @@ async function main() {
           );
         });
       }
+      break;
+    }
+    case 'listRange': {
+      const minId = Number(
+        await p.text({
+          message: 'Enter minimum task ID',
+        })
+      );
+      const maxId = Number(
+        await p.text({
+          message: 'Enter maximum task ID',
+        })
+      );
+      if (isNaN(minId) || isNaN(maxId)) {
+        console.log(
+          'Provide valid numeric IDs for the range'
+        );
+        process.exit(1);
+      }
+      if (minId > maxId) {
+        console.log(
+          'Minimum ID cannot be greater than maximum ID'
+        );
+        process.exit(1);
+      }
+      const tasks = TaskService.getTasksByIdRange(
+        minId,
+        maxId
+      );
+      console.log(
+        `Tasks in range [${minId} - ${maxId}]:`
+      );
+      tasks.forEach((task) => {
+        console.log(
+          `[${task.id}] ${
+            task.completed ? '[x]' : '[ ]'
+          } ${task.title}`
+        );
+      });
       break;
     }
     case 'edit': {
